@@ -1,0 +1,852 @@
+{
+  "name": "AI Reels with two images",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "brand creative test.png",
+          "cachedResultUrl": "<link>"
+        },
+        "options": {
+          "binaryPropertyName": "<BINARYPROPERTYNAME_ID>"
+        }
+      },
+      "id": "<ID_ID>",
+      "name": "Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        280,
+        320
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "<ID_ID>",
+          "name": "<NAME_EMAIL>"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "<URL_URL>",
+        "authentication": "<AUTHENTICATION_ID>",
+        "genericAuthType": "<GENERICAUTHTYPE_ID>",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "inputs",
+              "value": "=Depict  {{ $json.output['Image Prompt'] || $json.output[0]['Image Prompt'] }}"
+            }
+          ]
+        },
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 1,
+              "batchInterval": 10000
+            }
+          }
+        }
+      },
+      "id": "<ID_ID>",
+      "name": "Call hugginface inference api",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        280,
+        500
+      ],
+      "notesInFlow": true,
+      "typeVersion": 4.2,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "<ID_ID>",
+          "name": "Header Auth account"
+        }
+      },
+      "onError": "<ONERROR_ID>",
+      "notes": " "
+    },
+    {
+      "parameters": {
+        "operation": "composite",
+        "dataPropertyNameComposite": "<DATAPROPERTYNAMECOMPOSITE_ID>",
+        "options": {}
+      },
+      "id": "<ID_ID>",
+      "name": "Edit Image",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        920,
+        480
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "<ID_ID>",
+      "name": "Wikipedia",
+      "type": "<TYPE_EMAIL>",
+      "typeVersion": 1,
+      "position": [
+        -220,
+        820
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "text": "={{ $json.output.Tip }} {{ $json.output['Did You Know Fact'] }}",
+        "fontSize": 30,
+        "positionX": 220,
+        "positionY": 630,
+        "lineLength": 45,
+        "options": {
+          "font": "/usr/share/fonts/truetype/msttcorefonts/Comic_Sans_MS.ttf"
+        }
+      },
+      "id": "<ID_ID>",
+      "name": "Edit Image1",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "text",
+        "text": "Call : xxxxx   Whatsapp : xxxxx   Website: example.com",
+        "fontSize": 24,
+        "positionX": 80,
+        "positionY": 1010,
+        "options": {
+          "font": "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf",
+          "format": "png"
+        }
+      },
+      "id": "<ID_ID>",
+      "name": "Edit Image2",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "name": "=Tip of the Day {{ $now }}.png",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1Z3krfd0QE5w4-aTfLRxekCqDls_LUfop",
+          "mode": "list",
+          "cachedResultName": "Tip of the day",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1Z3krfd0QE5w4-aTfLRxekCqDls_LUfop"
+        },
+        "options": {}
+      },
+      "id": "<ID_ID>",
+      "name": "Google Drive1",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1780,
+        480
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "<ID_ID>",
+          "name": "<NAME_EMAIL>"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "<COMBINEBY_ID>",
+        "options": {}
+      },
+      "id": "<ID_ID>",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        700,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "blur",
+        "sigma": 4,
+        "options": {}
+      },
+      "id": "<ID_ID>",
+      "name": "Edit Image3",
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        520,
+        460
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "<ID_ID>",
+      "name": "Auto-fixing Output Parser",
+      "type": "<TYPE_EMAIL>",
+      "typeVersion": 1,
+      "position": [
+        -20,
+        740
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "<ID_ID>",
+      "name": "When clicking \u2018Test workflow\u2019",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -540,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "<COMBINEBY_ID>",
+        "options": {}
+      },
+      "id": "<ID_ID>",
+      "name": "Merge1",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        760,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"Topic\": \"Customer Support\",\n  \"Tip\": \"Customer Support me Automation se aap 30% tak salary cost bacha sakte hai.\",\n  \"Image Prompt\": \"A bustling Indian customer support call center with agents working at desks, speaking on headsets. The scene is vibrant and professional, showing a mix of technology and busy employees managing customer queries.\"\n}\n"
+      },
+      "id": "<ID_ID>",
+      "name": "Structured Output Parser",
+      "type": "<TYPE_EMAIL>",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        960
+      ]
+    },
+    {
+      "parameters": {
+        "options": {
+          "frequencyPenalty": 0.2,
+          "temperature": 0.7
+        }
+      },
+      "id": "<ID_ID>",
+      "name": "OpenAI Chat Model",
+      "type": "<TYPE_EMAIL>",
+      "typeVersion": 1,
+      "position": [
+        -440,
+        820
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "<ID_ID>",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {
+          "frequencyPenalty": 0.2,
+          "temperature": 0.7
+        }
+      },
+      "id": "<ID_ID>",
+      "name": "OpenAI Chat Model1",
+      "type": "<TYPE_EMAIL>",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        960
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "<ID_ID>",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1C1D-Md8fNZBveebGWd6w09l2oyj2M_XQ",
+          "mode": "list",
+          "cachedResultName": "farzi_paisa_bgm.mp3",
+          "cachedResultUrl": "https://drive.google.com/file/d/1C1D-Md8fNZBveebGWd6w09l2oyj2M_XQ/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "id": "<ID_ID>",
+      "name": "Google Drive2",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1980,
+        480
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "<ID_ID>",
+          "name": "<NAME_EMAIL>"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "destinationPath": "/home/node/n8n_storage/reel_audio",
+        "hashFilenames": false
+      },
+      "id": "<ID_ID>",
+      "name": "Store Files",
+      "type": "n8n-nodes-auto-file-storer.autoFileStorer",
+      "typeVersion": 1,
+      "position": [
+        2200,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "destinationPath": "/home/node/n8n_storage/reel_audio",
+        "hashFilenames": false
+      },
+      "id": "<ID_ID>",
+      "name": "Store Files1",
+      "type": "n8n-nodes-auto-file-storer.autoFileStorer",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {}
+      },
+      "id": "<ID_ID>",
+      "name": "OpenAI Chat Model2",
+      "type": "<TYPE_EMAIL>",
+      "typeVersion": 1,
+      "position": [
+        2780,
+        760
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "<ID_ID>",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fileSelector": "={{ $json.output.output_video }}",
+        "options": {}
+      },
+      "id": "<ID_ID>",
+      "name": "Read/Write Files from Disk",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        3680,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "\"Create 1 \u2018Did You Know?\u2019 Instagram post idea for DevopShivam  in an urban Hinglish style. Post should include a fun fact about how automation can help businesses improve productivity, efficiency, or customer engagement. Each post should have a short, catchy fact(you can use wikipedia to get information) written in Hinglish (mix of Hindi and English). Also, include an Image Prompt for each post.\n\nFor example:\n\nPost Topic: Automated Billing\nDid You Know Fact: \"Kya Apko pata hai? Automated billing se aapka time 30% bach sakta hai, aur payments time par milte hain!\"\nImage Prompt: \"A clean and modern digital illustration showing an automated billing process. A cheerful business owner with black hair and glasses is seated at a stylish office desk, looking at a computer screen displaying automated invoices being sent to customers. The background features a large window with sunlight streaming in, plants, and a wall clock showing punctuality.\"\n\nPost Topic: Website Speed Optimization\nDid You Know Fact: \"Kya aapko pata hai? Website ki speed ko optimize karne se conversions 20% tak badh sakti hain, aur is process ko automate bhi kar sakte ho!\"\nImage Prompt:A clean and modern digital illustration showing Before-and-after of a slow website vs. an optimized, fast-loading website.\nGive output in JSON format\n{\nPost Topic:\nDid You Know Fact:\nImage Prompt:}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a helpful assistant of DevopShivam .\nCompany Overview: DevopShivam  specializes in advanced automation solutions for businesses, focusing on streamlining processes, enhancing efficiency, and driving growth using state-of-the-art tools and technologies.\n\nTarget Audience: The company serves Micro, Small, and Medium Enterprises (MSMEs) across India.\n\nServices Offered:\n\nMarketing Automation\nCRM and Sales Automation\nCustomer Support Solutions\nFinancial Process Automation\nOperations and Supply Chain Management\nIT and System Integration\nCore Values: DevopShivam emphasizes innovation, reliability, and client satisfaction.\n\nTeam Composition: "
+        }
+      },
+      "id": "<ID_ID>",
+      "name": "AI Agent",
+      "type": "<TYPE_EMAIL>",
+      "typeVersion": 1.6,
+      "position": [
+        -320,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "command": "=ffmpeg -loop 1 -i /home/node/n8n_storage/reel_audio/FLUX.png -loop 1 -i /home/node/n8n_storage/reel_audio/119.jpg -i /home/node/n8n_storage/reel_audio/81761fae445deda654cc619e6c76caa8.mp3 \\\n-filter_complex \"[0:v]trim=duration=5[img1]; \\\n[1:v]trim=duration=5[img2]; \\\n[img1][img2]xfade=transition=slideleft:duration=2:offset=2,format=yuv420p[video]; \\\n[video]setpts=PTS-STARTPTS[v];[2:a]aresample=async=1[a]\" \\\n-map \"[v]\" -map \"[a]\" -shortest -r 30 /home/node/n8n_storage/reel_audio/Reel_{{ $now }}.mp4"
+      },
+      "id": "<ID_ID>",
+      "name": "Execute Command",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        3100,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.stderr }}",
+        "attributes": {
+          "attributes": [
+            {
+              "name": "<NAME_ID>",
+              "description": "location of input image"
+            },
+            {
+              "name": "<NAME_ID>",
+              "description": "Location of input audio"
+            },
+            {
+              "name": "<NAME_ID>",
+              "description": "Location of output video"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "<ID_ID>",
+      "name": "Information Extractor",
+      "type": "<TYPE_EMAIL>",
+      "typeVersion": 1,
+      "position": [
+        3320,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "<ID_ID>",
+      "name": "OpenAI Chat Model3",
+      "type": "<TYPE_EMAIL>",
+      "typeVersion": 1,
+      "position": [
+        3560,
+        780
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "<ID_ID>",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "",
+          "mode": "list",
+          "cachedResultName": "119.jpg",
+          "cachedResultUrl": ""
+        },
+        "options": {}
+      },
+      "id": "<ID_ID>",
+      "name": "Google Drive3",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2420,
+        480
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "<ID_ID>",
+          "name": "<NAME_EMAIL>"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "destinationPath": "/home/node/n8n_storage/reel_audio",
+        "hashFilenames": false
+      },
+      "id": "<ID_ID>",
+      "name": "Store Files2",
+      "type": "n8n-nodes-auto-file-storer.autoFileStorer",
+      "typeVersion": 1,
+      "position": [
+        2640,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "directoryPath": "/home/node/n8n_storage/reel_audio"
+      },
+      "id": "<ID_ID>",
+      "name": "Explore Stored Files",
+      "type": "n8n-nodes-auto-file-storer.autoFileStorerExplorer",
+      "typeVersion": 1,
+      "position": [
+        2860,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "command": "ffmpeg -loop 1 -i base_image.png -loop 1 -i popup_image.png -i audio.mp3 \\\n-filter_complex \"[0:v][1:v]overlay=(W-w)/2:(H-h)/2:enable='between(t,1,3)'[popup]; \\\n[popup]fade=out:st=3:d=1[video]\" \\\n-map \"[video]\" -map 2:a -shortest -r 30 output.mp4\n"
+      },
+      "id": "<ID_ID>",
+      "name": "Execute Command1",
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        3080,
+        800
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call hugginface inference api": {
+      "main": [
+        [
+          {
+            "node": "Edit Image3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Image": {
+      "main": [
+        [
+          {
+            "node": "Edit Image1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wikipedia": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Image1": {
+      "main": [
+        [
+          {
+            "node": "Edit Image2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Image2": {
+      "main": [
+        [
+          {
+            "node": "Store Files1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive1": {
+      "main": [
+        [
+          {
+            "node": "Google Drive2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Image3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Auto-fixing Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "<TYPE_ID>",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking \u2018Test workflow\u2019": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Edit Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "<TYPE_ID>",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "<TYPE_ID>",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-fixing Output Parser",
+            "type": "<TYPE_ID>",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive2": {
+      "main": [
+        [
+          {
+            "node": "Store Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Files": {
+      "main": [
+        [
+          {
+            "node": "Google Drive3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Files1": {
+      "main": [
+        [
+          {
+            "node": "Google Drive1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        []
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Call hugginface inference api",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "<TYPE_ID>",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive3": {
+      "main": [
+        [
+          {
+            "node": "Store Files2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Files2": {
+      "main": [
+        [
+          {
+            "node": "Explore Stored Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Explore Stored Files": {
+      "main": [
+        [
+          {
+            "node": "Execute Command",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Execute Command1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "<VERSIONID_ID>",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "<INSTANCEID_ID>"
+  },
+  "id": "<ID_ID>",
+  "tags": []
+}
